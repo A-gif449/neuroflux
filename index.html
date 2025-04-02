@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainMaster | Logic & Creativity Games</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #560bad;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--light);
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #f1f1f1;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.75rem; }
+        h4 { font-size: 1.5rem; }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary);
+        }
+
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .menu {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .menu a {
+            color: white;
+            font-weight: 500;
+        }
+
+        .menu a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Games Section */
+        .section-title {
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .game-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .dark-mode .game-card {
+            background-color: #1e1e1e;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .game-card-content {
+            padding: 1.5rem;
+        }
+
+        .game-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .game-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .dark-mode .game-card p {
+            color: #aaa;
+        }
+
+        .game-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Game Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+        }
+
+        .dark-mode .modal-content {
+            background-color: #1e1e1e;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--dark);
+        }
+
+        .dark-mode .close-modal {
+            color: var(--light);
+        }
+
+        /* Game Containers */
+        .game-container {
+            margin-top: 2rem;
+        }
+
+        /* Sudoku Game */
+        .sudoku-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 1px;
+            background-color: var(--dark);
+            border: 2px solid var(--dark);
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .sudoku-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dark-mode .sudoku-cell {
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        .sudoku-cell:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dark-mode .sudoku-cell:hover {
+            background-color: #3a3a3a;
+        }
+
+        .sudoku-cell.fixed {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .dark-mode .sudoku-cell.fixed {
+            background-color: #252525;
+            color: var(--accent);
+        }
+
+        .sudoku-cell.highlighted {
+            background-color: #e2f0fd;
+        }
+
+        .dark-mode .sudoku-cell.highlighted {
+            background-color: #1a3a5a;
+        }
+
+        .sudoku-cell.error {
+            color: var(--danger);
+        }
+
+        .sudoku-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .number-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .number-btn {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light);
+            border: 1px solid #ddd;
+            border-radius: 0.25rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .number-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .dark-mode .number-btn {
+            background-color: #2d2d2d;
+            border-color: #444;
+        }
+
+        .dark-mode .number-btn:hover {
+            background-color: #3a3a3a;
+        }
+
+        /* Nonogram Game */
+        .nonogram-grid {
+            display: grid;
+            gap: 1px;
+            background-color: var(--dark);
+            border: 2px solid var(--dark);
+            margin: 0 auto;
+        }
+
+        .nonogram-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dark-mode .nonogram-cell {
+            background-color: #2d2d2d;
+        }
+
+        .nonogram-cell.filled {
+            background-color: var(--dark);
+        }
+
+        .dark-mode .nonogram-cell.filled {
+            background-color: white;
+        }
+
+        .nonogram-cell.marked {
+            background-color: #f8f9fa;
+            position: relative;
+        }
+
+        .dark-mode .nonogram-cell.marked {
+            background-color: #252525;
+        }
+
+        .nonogram-cell.marked::after {
+            content: 'X';
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .nonogram-clues {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .nonogram-row-clues, .nonogram-col-clues {
+            display: grid;
+            gap: 1px;
+        }
+
+        .nonogram-clue {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .dark-mode .nonogram-clue {
+            background-color: #252525;
+        }
+
+        /* Tower of Hanoi */
+        .hanoi-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+            height: 300px;
+        }
+
+        .hanoi-peg {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            width: 20%;
+            border-bottom: 10px solid #6c757d;
+            position: relative;
+        }
+
+        .hanoi-peg::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 200px;
+            background-color: #6c757d;
+            z-index: 0;
+        }
+
+        .hanoi-disk {
+            height: 30px;
+            border-radius: 15px;
+            margin-bottom: 5px;
+            z-index: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            margin: 4rem auto;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .comment-form {
+            margin-bottom: 2rem;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .dark-mode .comment-input {
+            background-color: #2d2d2d;
+            border-color: #444;
+            color: white;
+        }
+
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .comment {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .comment {
+            background-color: #1e1e1e;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-author {
+            font-weight: bold;
+        }
+
+        .comment-date {
+            color: #6c757d;
+            font-size: 0.8rem;
+        }
+
+        .dark-mode .comment-date {
+            color: #aaa;
+        }
+
+        .comment-content {
+            margin-bottom: 1rem;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .like-btn, .reply-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .dark-mode .like-btn, .dark-mode .reply-btn {
+            color: #aaa;
+        }
+
+        .like-btn.liked {
+            color: var(--danger);
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            margin: 4rem auto;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dark-mode .leaderboard-table th, 
+        .dark-mode .leaderboard-table td {
+            border-bottom-color: #444;
+        }
+
+        .leaderboard-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .dark-mode .leaderboard-table th {
+            background-color: #252525;
+        }
+
+        .leaderboard-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dark-mode .leaderboard-table tr:hover {
+            background-color: #252525;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: white;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">BrainMaster</div>
+        <div class="menu">
+            <a href="#games">Games</a>
+            <a href="#leaderboard">Leaderboard</a>
+            <a href="#comments">Community</a>
+            <button id="dark-mode-toggle" class="btn btn-outline">🌙 Dark Mode</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Challenge Your Mind</h1>
+            <p>Solve the toughest logic puzzles and creativity games designed to push your cognitive limits.</p>
+            <a href="#games" class="btn btn-primary">Explore Games</a>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="container">
+        <h2 class="section-title">Featured Games</h2>
+        <div class="games-grid">
+            <div class="game-card" onclick="openGameModal('sudoku')">
+                <div class="game-card-content">
+                    <h3>Extreme Sudoku</h3>
+                    <p>Classic number puzzle with a challenging twist. Fill the grid so each row, column and 3×3 box contains digits 1-9.</p>
+                    <div class="btn btn-outline">Play Now</div>
+                </div>
+            </div>
+            <div class="game-card" onclick="openGameModal('nonogram')">
+                <div class="game-card-content">
+                    <h3>Nonogram</h3>
+                    <p>Picture logic puzzle where you fill cells to reveal hidden images based on numerical clues.</p>
+                    <div class="btn btn-outline">Play Now</div>
+                </div>
+            </div>
+            <div class="game-card" onclick="openGameModal('hanoi')">
+                <div class="game-card-content">
+                    <h3>Tower of Hanoi</h3>
+                    <p>Mathematical puzzle where you move disks between rods following specific rules.</p>
+                    <div class="btn btn-outline">Play Now</div>
+                </div>
+            </div>
+            <div class="game-card" onclick="openGameModal('chess')">
+                <div class="game-card-content">
+                    <h3>Chess Puzzles</h3>
+                    <p>Tactical chess problems to improve your game. Find the best move in each position.</p>
+                    <div class="btn btn-outline">Play Now</div>
+                </div>
+            </div>
+            <div class="game-card" onclick="openGameModal('memory')">
+                <div class="game-card-content">
+                    <h3>Memory Matrix</h3>
+                    <p>Test your working memory by recalling increasingly complex patterns.</p>
+                    <div class="btn btn-outline">Play Now</div>
+                </div>
+            </div>
+            <div class="game-card" onclick="openGameModal('riddles')">
+                <div class="game-card-content">
+                    <h3>Logic Riddles</h3>
+                    <p>Solve challenging riddles that require creative thinking and deduction.</p>
+                    <div class="btn btn-outline">Play Now</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Modals -->
+    <div id="sudoku-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('sudoku-modal')">×</button>
+            <h2>Extreme Sudoku</h2>
+            <p>Fill the grid so that every row, column and 3×3 box contains the digits 1-9 without repeating.</p>
+            
+            <div class="game-container">
+                <div class="sudoku-grid" id="sudoku-board"></div>
+                <div class="sudoku-controls">
+                    <button class="btn btn-primary" onclick="checkSudoku()">Check Solution</button>
+                    <button class="btn btn-outline" onclick="solveSudoku()">Solve Puzzle</button>
+                    <button class="btn btn-outline" onclick="newSudokuGame()">New Game</button>
+                </div>
+                <div class="number-selector" id="sudoku-numbers"></div>
+                <p id="sudoku-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="nonogram-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('nonogram-modal')">×</button>
+            <h2>Nonogram Puzzle</h2>
+            <p>Use the numbers to determine which cells to fill and reveal the hidden picture.</p>
+            
+            <div class="game-container">
+                <div id="nonogram-container"></div>
+                <div class="sudoku-controls">
+                    <button class="btn btn-primary" onclick="checkNonogram()">Check Solution</button>
+                    <button class="btn btn-outline" onclick="newNonogramGame()">New Puzzle</button>
+                </div>
+                <p id="nonogram-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="hanoi-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('hanoi-modal')">×</button>
+            <h2>Tower of Hanoi</h2>
+            <p>Move all disks from the left peg to the right peg, following the rules:</p>
+            <ul>
+                <li>Only one disk can be moved at a time</li>
+                <li>A disk can only be placed on top of a larger disk or an empty peg</li>
+            </ul>
+            
+            <div class="game-container">
+                <div class="hanoi-container" id="hanoi-game"></div>
+                <div class="sudoku-controls">
+                    <button class="btn btn-primary" onclick="checkHanoiWin()">Check Solution</button>
+                    <button class="btn btn-outline" onclick="resetHanoiGame()">Reset Game</button>
+                </div>
+                <p>Moves: <span id="hanoi-moves">0</span></p>
+                <p id="hanoi-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <section id="leaderboard" class="leaderboard">
+        <div class="container">
+            <h2 class="section-title">Leaderboard</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Sudoku</th>
+                        <th>Nonogram</th>
+                        <th>Hanoi</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Filled by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section id="comments" class="comments-section">
+        <div class="container">
+            <h2 class="section-title">Community Feedback</h2>
+            <div class="comment-form">
+                <textarea class="comment-input" id="comment-text" placeholder="Share your thoughts about the games..."></textarea>
+                <button class="btn btn-primary" onclick="postComment()">Post Comment</button>
+            </div>
+            <div class="comment-list" id="comment-list">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <p class="copyright">© 2023 BrainMaster. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            darkModeToggle.textContent = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀️ Light Mode';
+        }
+
+        // Modal Functions
+        function openGameModal(game) {
+            document.getElementById(`${game}-modal`).style.display = 'block';
+            initializeGame(game);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize games when their modals are opened
+        function initializeGame(game) {
+            switch(game) {
+                case 'sudoku':
+                    if (!window.sudokuInitialized) {
+                        setupSudokuGame();
+                        window.sudokuInitialized = true;
+                    }
+                    break;
+                case 'nonogram':
+                    if (!window.nonogramInitialized) {
+                        setupNonogramGame();
+                        window.nonogramInitialized = true;
+                    }
+                    break;
+                case 'hanoi':
+                    if (!window.hanoiInitialized) {
+                        setupHanoiGame();
+                        window.hanoiInitialized = true;
+                    }
+                    break;
+            }
+        }
+
+        // Sudoku Game Implementation
+        function setupSudokuGame() {
+            const board = document.getElementById('sudoku-board');
+            const numbers = document.getElementById('sudoku-numbers');
+            board.innerHTML = '';
+            numbers.innerHTML = '';
+            
+            // Create Sudoku board (9x9 grid)
+            for (let i = 0; i < 81; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'sudoku-cell';
+                cell.dataset.index = i;
+                cell.addEventListener('click', () => selectSudokuCell(i));
+                board.appendChild(cell);
+            }
+            
+            // Create number selector (1-9 + clear)
+            for (let i = 1; i <= 9; i++) {
+                const numBtn = document.createElement('div');
+                numBtn.className = 'number-btn';
+                numBtn.textContent = i;
+                numBtn.addEventListener('click', () => fillSudokuNumber(i));
+                numbers.appendChild(numBtn);
+            }
+            
+            const clearBtn = document.createElement('div');
+            clearBtn.className = 'number-btn';
+            clearBtn.textContent = '⌫';
+            clearBtn.addEventListener('click', clearSudokuCell);
+            numbers.appendChild(clearBtn);
+            
+            // Generate a new game
+            newSudokuGame();
+        }
+
+        let selectedSudokuCell = null;
+        let sudokuSolution = Array(81).fill(0);
+        let sudokuPuzzle = Array(81).fill(0);
+
+        function selectSudokuCell(index) {
+            // Deselect previous cell
+            if (selectedSudokuCell !== null) {
+                const prevCell = document.querySelector(`.sudoku-cell[data-index="${selectedSudokuCell}"]`);
+                prevCell.classList.remove('highlighted');
+                
+                // Remove error class if it was marked
+                if (prevCell.textContent === '' || 
+                    prevCell.textContent === String(sudokuSolution[selectedSudokuCell])) {
+                    prevCell.classList.remove('error');
+                }
+            }
+            
+            // Select new cell if it's not a fixed cell
+            const cell = document.querySelector(`.sudoku-cell[data-index="${index}"]`);
+            if (!cell.classList.contains('fixed')) {
+                selectedSudokuCell = index;
+                cell.classList.add('highlighted');
+                
+                // Highlight peers (same row, column, or box)
+                highlightPeers(index);
+            } else {
+                selectedSudokuCell = null;
+            }
+        }
+
+        function highlightPeers(index) {
+            const row = Math.floor(index / 9);
+            const col = index % 9;
+            const boxRow = Math.floor(row / 3) * 3;
+            const boxCol = Math.floor(col / 3) * 3;
+            
+            // Clear all highlights first
+            document.querySelectorAll('.sudoku-cell').forEach(cell => {
+                cell.classList.remove('highlighted');
+            });
+            
+            // Highlight all cells in the same row, column, and box
+            for (let i = 0; i < 9; i++) {
+                // Same row
+                const rowCell = document.querySelector(`.sudoku-cell[data-index="${row * 9 + i}"]`);
+                rowCell.classList.add('highlighted');
+                
+                // Same column
+                const colCell = document.querySelector(`.sudoku-cell[data-index="${i * 9 + col}"]`);
+                colCell.classList.add('highlighted');
+                
+                // Same 3x3 box
+                const boxIndex = (boxRow + Math.floor(i / 3)) * 9 + (boxCol + (i % 3));
+                const boxCell = document.querySelector(`.sudoku-cell[data-index="${boxIndex}"]`);
+                boxCell.classList.add('highlighted');
+            }
+            
+            // Re-highlight the selected cell more strongly
+            if (selectedSudokuCell !== null) {
+                const selectedCell = document.querySelector(`.sudoku-cell[data-index="${selectedSudokuCell}"]`);
+                selectedCell.classList.add('highlighted');
+            }
+        }
+
+        function fillSudokuNumber(num) {
+            if (selectedSudokuCell === null) return;
+            
+            const cell = document.querySelector(`.sudoku-cell[data-index="${selectedSudokuCell}"]`);
+            if (cell.classList.contains('fixed')) return;
+            
+            cell.textContent = num;
+            sudokuPuzzle[selectedSudokuCell] = num;
+            
+            // Check if the number is correct
+            if (num !== sudokuSolution[selectedSudokuCell]) {
+                cell.classList.add('error');
+            } else {
+                cell.classList.remove('error');
+            }
+        }
+
+        function clearSudokuCell() {
+            if (selectedSudokuCell === null) return;
+            
+            const cell = document.querySelector(`.sudoku-cell[data-index="${selectedSudokuCell}"]`);
+            if (cell.classList.contains('fixed')) return;
+            
+            cell.textContent = '';
+            sudokuPuzzle[selectedSudokuCell] = 0;
+            cell.classList.remove('error');
+        }
+
+        function newSudokuGame() {
+            // Generate a new Sudoku puzzle
+            sudokuSolution = generateSudokuSolution();
+            sudokuPuzzle = generateSudokuPuzzle(sudokuSolution);
+            
+            // Update the board
+            const cells = document.querySelectorAll('.sudoku-cell');
+            cells.forEach((cell, index) => {
+                cell.textContent = sudokuPuzzle[index] !== 0 ? sudokuPuzzle[index] : '';
+                cell.className = 'sudoku-cell';
+                if (sudokuPuzzle[index] !== 0) {
+                    cell.classList.add('fixed');
+                }
+            });
+            
+            document.getElementById('sudoku-message').textContent = '';
+            selectedSudokuCell = null;
+        }
+
+        function generateSudokuSolution() {
+            // Create an empty grid
+            const grid = Array(81).fill(0);
+            
+            // Fill the grid with a valid Sudoku solution
+            solveSudokuGrid(grid);
+            
+            return grid;
+        }
+
+        function solveSudokuGrid(grid) {
+            const emptyCell = findEmptyCell(grid);
+            if (!emptyCell) return true; // Puzzle solved
+            
+            const [row, col] = emptyCell;
+            
+            // Try numbers 1-9
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            shuffleArray(numbers);
+            
+            for (const num of numbers) {
+                if (isValidPlacement(grid, row, col, num)) {
+                    grid[row * 9 + col] = num;
+                    
+                    if (solveSudokuGrid(grid)) {
+                        return true;
+                    }
+                    
+                    // Backtrack
+                    grid[row * 9 + col] = 0;
+                }
+            }
+            
+            return false; // Trigger backtracking
+        }
+
+        function findEmptyCell(grid) {
+            for (let i = 0; i < 81; i++) {
+                if (grid[i] === 0) {
+                    return [Math.floor(i / 9), i % 9];
+                }
+            }
+            return null;
+        }
+
+        function isValidPlacement(grid, row, col, num) {
+            // Check row
+            for (let i = 0; i < 9; i++) {
+                if (grid[row * 9 + i] === num) return false;
+            }
+            
+            // Check column
+            for (let i = 0; i < 9; i++) {
+                if (grid[i * 9 + col] === num) return false;
+            }
+            
+            // Check 3x3 box
+            const boxRow = Math.floor(row / 3) * 3;
+            const boxCol = Math.floor(col / 3) * 3;
+            
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (grid[(boxRow + i) * 9 + (boxCol + j)] === num) return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function generateSudokuPuzzle(solution) {
+            // Create a copy of the solution
+            const puzzle = [...solution];
+            
+            // Remove numbers to create the puzzle
+            const cellsToRemove = 45 + Math.floor(Math.random() * 10); // Remove 45-55 numbers
+            const indices = Array.from({length: 81}, (_, i) => i);
+            shuffleArray(indices);
+            
+            for (let i = 0; i < cellsToRemove; i++) {
+                puzzle[indices[i]] = 0;
+            }
+            
+            return puzzle;
+        }
+
+        function checkSudoku() {
+            const cells = document.querySelectorAll('.sudoku-cell');
+            let isComplete = true;
+            let isCorrect = true;
+            
+            cells.forEach((cell, index) => {
+                const value = cell.textContent === '' ? 0 : parseInt(cell.textContent);
+                
+                if (value === 0) {
+                    isComplete = false;
+                }
+                
+                if (value !== 0 && value !== sudokuSolution[index]) {
+                    cell.classList.add('error');
+                    isCorrect = false;
+                } else if (value !== 0) {
+                    cell.classList.remove('error');
+                }
+            });
+            
+            const message = document.getElementById('sudoku-message');
+            if (!isComplete) {
+                message.textContent = 'Puzzle not yet complete!';
+                message.style.color = 'var(--warning)';
+            } else if (!isCorrect) {
+                message.textContent = 'Some numbers are incorrect!';
+                message.style.color = 'var(--danger)';
+            } else {
+                message.textContent = 'Congratulations! Puzzle solved correctly!';
+                message.style.color = 'var(--success)';
+            }
+        }
+
+        function solveSudoku() {
+            const cells = document.querySelectorAll('.sudoku-cell');
+            cells.forEach((cell, index) => {
+                if (!cell.classList.contains('fixed')) {
+                    cell.textContent = sudokuSolution[index];
+                    cell.classList.remove('error');
+                }
+            });
+            
+            document.getElementById('sudoku-message').textContent = 'Puzzle solved!';
+            document.getElementById('sudoku-message').style.color = 'var(--success)';
+        }
+
+        // Nonogram Game Implementation
+        function setupNonogramGame() {
+            const container = document.getElementById('nonogram-container');
+            container.innerHTML = '';
+            
+            // Create a 10x10 Nonogram puzzle
+            const puzzle = generateNonogramPuzzle(10, 10);
+            window.currentNonogram = puzzle;
+            
+            // Create row clues
+            const rowClues = document.createElement('div');
+            rowClues.className = 'nonogram-row-clues';
+            
+            for (let i = 0; i < puzzle.height; i++) {
+                const clue = document.createElement('div');
+                clue.className = 'nonogram-clue';
+                clue.textContent = getNonogramClue(puzzle.grid, i, 'row');
+                rowClues.appendChild(clue);
+            }
+            
+            // Create column clues
+            const colClues = document.createElement('div');
+            colClues.className = 'nonogram-col-clues';
+            
+            for (let i = 0; i < puzzle.width; i++) {
+                const clue = document.createElement('div');
+                clue.className = 'nonogram-clue';
+                clue.textContent = getNonogramClue(puzzle.grid, i, 'col');
+                colClues.appendChild(clue);
+            }
+            
+            // Create the grid
+            const grid = document.createElement('div');
+            grid.className = 'nonogram-grid';
+            grid.style.gridTemplateColumns = `repeat(${puzzle.width}, 30px)`;
+            grid.style.gridTemplateRows = `repeat(${puzzle.height}, 30px)`;
+            
+            for (let i = 0; i < puzzle.height; i++) {
+                for (let j = 0; j < puzzle.width; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'nonogram-cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    
+                    cell.addEventListener('click', () => {
+                        if (!cell.classList.contains('marked')) {
+                            cell.classList.toggle('filled');
+                        }
+                    });
+                    
+                    cell.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        if (!cell.classList.contains('filled')) {
+                            cell.classList.toggle('marked');
+                        }
+                    });
+                    
+                    grid.appendChild(cell);
+                }
+            }
+            
+            // Assemble the container
+            container.appendChild(rowClues);
+            container.appendChild(colClues);
+            container.appendChild(grid);
+        }
+
+        function generateNonogramPuzzle(width, height) {
+            const grid = [];
+            const solution = [];
+            
+            // Generate a random solution (about 30% filled)
+            for (let i = 0; i < height; i++) {
+                const row = [];
+                for (let j = 0; j < width; j++) {
+                    row.push(Math.random() < 0.3 ? 1 : 0);
+                }
+                solution.push(row);
+            }
+            
+            // Ensure no empty rows or columns
+            for (let i = 0; i < height; i++) {
+                if (solution[i].every(cell => cell === 0)) {
+                    const j = Math.floor(Math.random() * width);
+                    solution[i][j] = 1;
+                }
+            }
+            
+            for (let j = 0; j < width; j++) {
+                let empty = true;
+                for (let i = 0; i < height; i++) {
+                    if (solution[i][j] === 1) {
+                        empty = false;
+                        break;
+                    }
+                }
+                if (empty) {
+                    const i = Math.floor(Math.random() * height);
+                    solution[i][j] = 1;
+                }
+            }
+            
+            return {
+                width,
+                height,
+                grid: solution
+            };
+        }
+
+        function getNonogramClue(grid, index, direction) {
+            const counts = [];
+            let current = 0;
+            
+            if (direction === 'row') {
+                for (let j = 0; j < grid[index].length; j++) {
+                    if (grid[index][j] === 1) {
+                        current++;
+                    } else if (current > 0) {
+                        counts.push(current);
+                        current = 0;
+                    }
+                }
+            } else { // column
+                for (let i = 0; i < grid.length; i++) {
+                    if (grid[i][index] === 1) {
+                        current++;
+                    } else if (current > 0) {
+                        counts.push(current);
+                        current = 0;
+                    }
+                }
+            }
+            
+            if (current > 0) counts.push(current);
+            return counts.join(',');
+        }
+
+        function checkNonogram() {
+            const grid = document.querySelector('.nonogram-grid');
+            const cells = grid.querySelectorAll('.nonogram-cell');
+            const solution = window.currentNonogram.grid;
+            let isCorrect = true;
+            
+            cells.forEach(cell => {
+                const row = parseInt(cell.dataset.row);
+                const col = parseInt(cell.dataset.col);
+                const isFilled = cell.classList.contains('filled');
+                
+                if ((solution[row][col] === 1 && !isFilled) || 
+                    (solution[row][col] === 0 && isFilled)) {
+                    cell.classList.add('error');
+                    isCorrect = false;
+                } else {
+                    cell.classList.remove('error');
+                }
+            });
+            
+            const message = document.getElementById('nonogram-message');
+            if (isCorrect) {
+                message.textContent = 'Congratulations! Puzzle solved correctly!';
+                message.style.color = 'var(--success)';
+            } else {
+                message.textContent = 'Some cells are incorrect!';
+                message.style.color = 'var(--danger)';
+            }
+        }
+
+        function newNonogramGame() {
+            setupNonogramGame();
+            document.getElementById('nonogram-message').textContent = '';
+        }
+
+        // Tower of Hanoi Implementation
+        function setupHanoiGame() {
+            const gameContainer = document.getElementById('hanoi-game');
+            gameContainer.innerHTML = '';
+            
+            // Create 3 pegs
+            for (let i = 0; i < 3; i++) {
+                const peg = document.createElement('div');
+                peg.className = 'hanoi-peg';
+                peg.dataset.peg = i;
+                peg.addEventListener('click', () => handlePegClick(i));
+                gameContainer.appendChild(peg);
+            }
+            
+            // Create disks (5 disks)
+            const pegs = document.querySelectorAll('.hanoi-peg');
+            for (let i = 5; i >= 1; i--) {
+                const disk = document.createElement('div');
+                disk.className = 'hanoi-disk';
+                disk.dataset.size = i;
+                disk.style.width = `${i * 30 + 40}px`;
+                disk.style.backgroundColor = getRandomColor();
+                disk.textContent = i;
+                pegs[0].appendChild(disk);
+            }
+            
+            window.hanoiState = {
+                selectedDisk: null,
+                selectedPeg: null,
+                moves: 0
+            };
+            
+            document.getElementById('hanoi-moves').textContent = '0';
+            document.getElementById('hanoi-message').textContent = '';
+        }
+
+        function getRandomColor() {
+            const colors = [
+                '#f94144', '#f3722c', '#f8961e', '#f9c74f', '#90be6d',
+                '#43aa8b', '#577590', '#6d597a', '#b56576', '#e56b6f'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function handlePegClick(pegIndex) {
+            const state = window.hanoiState;
+            const pegs = document.querySelectorAll('.hanoi-peg');
+            const peg = pegs[pegIndex];
+            const disks = peg.querySelectorAll('.hanoi-disk');
+            const topDisk = disks.length > 0 ? disks[disks.length - 1] : null;
+            
+            if (state.selectedDisk === null) {
+                // Select a disk to move
+                if (topDisk) {
+                    state.selectedDisk = topDisk;
+                    state.selectedPeg = pegIndex;
+                    topDisk.style.opacity = '0.7';
+                }
+            } else {
+                // Move the selected disk to this peg
+                if (state.selectedPeg === pegIndex) {
+                    // Same peg - deselect
+                    state.selectedDisk.style.opacity = '1';
+                    state.selectedDisk = null;
+                    state.selectedPeg = null;
+                } else {
+                    // Check if move is valid
+                    const targetTopDisk = topDisk;
+                    const movingDiskSize = parseInt(state.selectedDisk.dataset.size);
+                    
+                    if (!targetTopDisk || movingDiskSize < parseInt(targetTopDisk.dataset.size)) {
+                        // Valid move
+                        state.selectedDisk.style.opacity = '1';
+                        peg.appendChild(state.selectedDisk);
+                        state.moves++;
+                        document.getElementById('hanoi-moves').textContent = state.moves;
+                        
+                        // Check for win
+                        checkHanoiWin();
+                    } else {
+                        // Invalid move
+                        document.getElementById('hanoi-message').textContent = 'Invalid move! You cannot place a larger disk on a smaller one.';
+                        document.getElementById('hanoi-message').style.color = 'var(--danger)';
+                    }
+                    
+                    state.selectedDisk = null;
+                    state.selectedPeg = null;
+                }
+            }
+        }
+
+        function checkHanoiWin() {
+            const pegs = document.querySelectorAll('.hanoi-peg');
+            if (pegs[2].querySelectorAll('.hanoi-disk').length === 5) {
+                document.getElementById('hanoi-message').textContent = `Congratulations! You solved it in ${window.hanoiState.moves} moves!`;
+                document.getElementById('hanoi-message').style.color = 'var(--success)';
+                return true;
+            }
+            return false;
+        }
+
+        function resetHanoiGame() {
+            setupHanoiGame();
+        }
+
+        // Comments System
+        let comments = [
+            { id: 1, author: 'PuzzleMaster', text: 'Love the Sudoku game! The difficulty is just right.', date: '2023-05-15T10:30:00', likes: 12, liked: false },
+            { id: 2, author: 'LogicLover', text: 'The Nonogram puzzles are challenging but fun!', date: '2023-05-14T15:45:00', likes: 8, liked: true },
+            { id: 3, author: 'BrainTeaser', text: 'Would love to see more variety in the Tower of Hanoi difficulty levels.', date: '2023-05-12T09:15:00', likes: 5, liked: false }
+        ];
+
+        function renderComments() {
+            const commentList = document.getElementById('comment-list');
+            commentList.innerHTML = '';
+            
+            comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            comments.forEach(comment => {
+                const commentEl = document.createElement('div');
+                commentEl.className = 'comment';
+                
+                const date = new Date(comment.date);
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                commentEl.innerHTML = `
+                    <div class="comment-header">
+                        <span class="comment-author">${comment.author}</span>
+                        <span class="comment-date">${dateStr}</span>
+                    </div>
+                    <div class="comment-content">${comment.text}</div>
+                    <div class="comment-actions">
+                        <button class="like-btn ${comment.liked ? 'liked' : ''}" onclick="toggleLike(${comment.id})">
+                            👍 ${comment.likes}
+                        </button>
+                    </div>
+                `;
+                
+                commentList.appendChild(commentEl);
+            });
+        }
+
+        function postComment() {
+            const commentText = document.getElementById('comment-text').value.trim();
+            if (!commentText) return;
+            
+            const newComment = {
+                id: comments.length + 1,
+                author: 'Anonymous', // In a real app, this would be the logged in user
+                text: commentText,
+                date: new Date().toISOString(),
+                likes: 0,
+                liked: false
+            };
+            
+            comments.unshift(newComment);
+            renderComments();
+            document.getElementById('comment-text').value = '';
+        }
+
+        function toggleLike(commentId) {
+            const comment = comments.find(c => c.id === commentId);
+            if (!comment) return;
+            
+            if (comment.liked) {
+                comment.likes--;
+                comment.liked = false;
+            } else {
+                comment.likes++;
+                comment.liked = true;
+            }
+            
+            renderComments();
+        }
+
+        // Leaderboard Data
+        const leaderboardData = [
+            { rank: 1, name: 'PuzzleMaster', sudoku: 950, nonogram: 880, hanoi: 620, total: 2450 },
+            { rank: 2, name: 'LogicLover', sudoku: 890, nonogram: 920, hanoi: 580, total: 2390 },
+            { rank: 3, name: 'BrainTeaser', sudoku: 870, nonogram: 850, hanoi: 650, total: 2370 },
+            { rank: 4, name: 'CodeCracker', sudoku: 920, nonogram: 800, hanoi: 600, total: 2320 },
+            { rank: 5, name: 'MindBender', sudoku: 850, nonogram: 820, hanoi: 620, total: 2290 },
+            { rank: 6, name: 'ThinkTank', sudoku: 800, nonogram: 850, hanoi: 600, total: 2250 },
+            { rank: 7, name: 'RiddleMeThis', sudoku: 780, nonogram: 820, hanoi: 580, total: 2180 },
+            { rank: 8, name: 'SolutionSeeker', sudoku: 750, nonogram: 800, hanoi: 550, total: 2100 },
+            { rank: 9, name: 'GridGuru', sudoku: 700, nonogram: 780, hanoi: 500, total: 1980 },
+            { rank: 10, name: 'PuzzleNewbie', sudoku: 650, nonogram: 700, hanoi: 450, total: 1800 }
+        ];
+
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+            
+            leaderboardData.forEach(player => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="rank">${player.rank}</td>
+                    <td>${player.name}</td>
+                    <td>${player.sudoku}</td>
+                    <td>${player.nonogram}</td>
+                    <td>${player.hanoi}</td>
+                    <td><strong>${player.total}</strong></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderComments();
+            renderLeaderboard();
+        });
+    </script>
+</body>
+</html>
